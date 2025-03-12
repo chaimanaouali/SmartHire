@@ -1,15 +1,15 @@
 {
   "Header": {
-    "title": "We are a Landing Page",
-    "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sed commodo nibh ante facilisis bibendum."
+    "title": "Welcome to Esprit Smart Hire",
+    "paragraph": "Here you can find the best jobs for you."
   },
   "About": {
-    "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "paragraph": "Fondée en 2003 à l’initiative de trois universitaires ayant conduit de nombreux projets dans l’enseignement supérieur tunisien, et dans l’enseignement supérieur technique en particulier, entourés de plusieurs dizaines de leurs collègues, ainsi que d’entreprises TIC et de partenaires financiers, Esprit a dès le départ mis en place des formations basées sur des valeurs intangibles .",
     "Why": [
-      "Lorem ipsum dolor",
-      "Tempor incididunt",
-      "Lorem ipsum dolor",
-      "Incididunt ut labore"
+      "Des formations certifiantes et qualifiantes",
+      "catalogue de formation riche",
+      "Accompagnement personnalisé",
+      "Environnement"
     ],
     "Why2": [
       "Aliquip ex ea commodo",

@@ -1,6 +1,50 @@
-import React from "react";
+import React, { useState, useRef } from "react";
+import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import './navigation.css';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 export const Navigation = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated, logout } = useAuth();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  useClickOutside(dropdownRef, () => setShowDropdown(false));
+
+  const handleProfileClick = (e) => {
+    e.preventDefault();
+    if (isAuthenticated) {
+      setShowDropdown(!showDropdown);
+    } else {
+      navigate('/auth');
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth');
+    setShowDropdown(false);
+  };
+
+  const handleNavClick = (path) => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.querySelector(path);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.querySelector(path);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -17,9 +61,13 @@ export const Navigation = (props) => {
             <span className="icon-bar"></span>{" "}
             <span className="icon-bar"></span>{" "}
           </button>
-          <a className="navbar-brand page-scroll" href="#page-top">
-            React Landing Page
-          </a>{" "}
+          <Link 
+            className="navbar-brand" 
+            to="/"
+            onClick={() => handleNavClick('#page-top')}
+          >
+            SMART HIRE
+          </Link>{" "}
         </div>
 
         <div
@@ -28,39 +76,87 @@ export const Navigation = (props) => {
         >
           <ul className="nav navbar-nav navbar-right">
             <li>
-              <a href="#features" className="page-scroll">
-                Features
-              </a>
+              <button 
+                onClick={() => handleNavClick('#features')} 
+                className="nav-link"
+              >
+                HOME
+              </button>
             </li>
             <li>
-              <a href="#about" className="page-scroll">
-                About
-              </a>
+              <button 
+                onClick={() => handleNavClick('#about')} 
+                className="nav-link"
+              >
+                ABOUT
+              </button>
             </li>
             <li>
-              <a href="#services" className="page-scroll">
-                Services
-              </a>
+              <button 
+                onClick={() => handleNavClick('#services')} 
+                className="nav-link"
+              >
+                JOB APPLICATION
+              </button>
             </li>
             <li>
-              <a href="#portfolio" className="page-scroll">
-                Gallery
-              </a>
+              <button 
+                onClick={() => handleNavClick('#portfolio')} 
+                className="nav-link"
+              >
+                RESULTS
+              </button>
             </li>
             <li>
-              <a href="#testimonials" className="page-scroll">
-                Testimonials
-              </a>
+              <button 
+                onClick={() => handleNavClick('#testimonials')} 
+                className="nav-link"
+              >
+                INFORMATIONS
+              </button>
             </li>
             <li>
-              <a href="#team" className="page-scroll">
+              <button 
+                onClick={() => handleNavClick('#team')} 
+                className="nav-link"
+              >
                 Team
-              </a>
+              </button>
             </li>
             <li>
-              <a href="#contact" className="page-scroll">
-                Contact
-              </a>
+              <button 
+                onClick={() => handleNavClick('#contact')} 
+                className="nav-link"
+              >
+                CONTACT
+              </button>
+            </li>
+            <li className="profile-menu-item" ref={dropdownRef}>
+              <button 
+                onClick={handleProfileClick}
+                className="profile-link"
+              >
+                {isAuthenticated ? (
+                  <FaUserCircle size={24} />
+                ) : (
+                  "Sign In"
+                )}
+              </button>
+              {isAuthenticated && showDropdown && (
+                <div className="profile-dropdown">
+                  <Link to="/profile" className="dropdown-item">
+                    <FaUserCircle />
+                    Profile
+                  </Link>
+                  <button 
+                    onClick={handleLogout} 
+                    className="dropdown-item logout-button"
+                  >
+                    <FaSignOutAlt />
+                    Logout
+                  </button>
+                </div>
+              )}
             </li>
           </ul>
         </div>
@@ -68,3 +164,4 @@ export const Navigation = (props) => {
     </nav>
   );
 };
+
