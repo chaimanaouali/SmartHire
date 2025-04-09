@@ -1,5 +1,5 @@
 export interface JobListing {
-  id: string;
+  _id?: string;
   title: string;
   department: string;
   location: string;
@@ -12,5 +12,5 @@ export interface JobListing {
   };
   status: 'active' | 'draft';
   deadline: string;
-  postedDate: string;
+  postedDate?: string;
 } 

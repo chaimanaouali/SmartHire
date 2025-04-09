@@ -1,7 +1,12 @@
 import { JobListing } from '@/types/job';
-import { Table, TableHeader, TableBody, TableRow, TableCell } from '@/components/ui/table';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
 import Badge from '@/components/ui/badge/Badge';
-import { formatDate } from '@/utils/dateUtils';
 import Button from '@/components/ui/button/Button';
 
 interface JobListingTableProps {
@@ -10,7 +15,27 @@ interface JobListingTableProps {
   onDelete: (id: string) => void;
 }
 
-export default function JobListingTable({ jobs, onEdit, onDelete }: JobListingTableProps) {
+const formatDate = (date: string) => {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+export default function JobListingTable({
+  jobs,
+  onEdit,
+  onDelete,
+}: JobListingTableProps) {
+  if (!jobs.length) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        No jobs found
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-full overflow-x-auto">
       <Table>
@@ -20,14 +45,15 @@ export default function JobListingTable({ jobs, onEdit, onDelete }: JobListingTa
             <TableCell>Department</TableCell>
             <TableCell>Location</TableCell>
             <TableCell>Type</TableCell>
+            <TableCell>Salary Range</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell>Posted Date</TableCell>
+            <TableCell>Deadline</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody>
           {jobs.map((job) => (
-            <TableRow key={job.id}>
+            <TableRow key={job._id}>
               <TableCell className="font-medium">{job.title}</TableCell>
               <TableCell>{job.department}</TableCell>
               <TableCell>{job.location}</TableCell>
@@ -35,25 +61,30 @@ export default function JobListingTable({ jobs, onEdit, onDelete }: JobListingTa
                 <Badge color="info">{job.type}</Badge>
               </TableCell>
               <TableCell>
+                ${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}
+              </TableCell>
+              <TableCell>
                 <Badge
-                  color={
-                    job.status === 'active'
-                      ? 'success'
-                      : job.status === 'closed'
-                      ? 'error'
-                      : 'warning'
-                  }
+                  color={job.status === 'active' ? 'success' : 'warning'}
                 >
                   {job.status}
                 </Badge>
               </TableCell>
-              <TableCell>{formatDate(job.postedDate)}</TableCell>
+              <TableCell>{formatDate(job.deadline)}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Button onClick={() => onEdit(job)} variant="outline" size="sm">
+                  <Button 
+                    onClick={() => onEdit(job)} 
+                    variant="outline" 
+                    size="sm"
+                  >
                     Edit
                   </Button>
-                  <Button onClick={() => onDelete(job.id)} variant="danger" size="sm" className="ml-2">
+                  <Button
+                    onClick={() => onDelete(job._id)}
+                    variant="danger"
+                    size="sm"
+                  >
                     Delete
                   </Button>
                 </div>
@@ -64,4 +95,4 @@ export default function JobListingTable({ jobs, onEdit, onDelete }: JobListingTa
       </Table>
     </div>
   );
-} 
+}
