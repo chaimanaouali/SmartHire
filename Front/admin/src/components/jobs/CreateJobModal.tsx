@@ -16,8 +16,15 @@ const jobSchema = z.object({
   experience: z.string().min(2, 'Experience requirements are required'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   salary: z.object({
-    min: z.number().min(0),
-    max: z.number().min(0),
+    min: z.number()
+      .min(0, 'Minimum salary cannot be negative')
+      .transform(val => Math.round(val)), // Round to whole numbers
+    max: z.number()
+      .min(0, 'Maximum salary cannot be negative')
+      .transform(val => Math.round(val)), // Round to whole numbers
+  }).refine(data => data.max >= data.min, {
+    message: "Maximum salary must be greater than or equal to minimum salary",
+    path: ["max"], // Show error on max field
   }),
   deadline: z.string().min(1, 'Deadline is required'),
   status: z.enum(['active', 'draft']).default('draft')
@@ -42,7 +49,7 @@ export default function CreateJobModal({
 }: CreateJobModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<JobFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm<JobFormData>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
       title: '',
@@ -59,6 +66,10 @@ export default function CreateJobModal({
       status: 'draft'
     }
   });
+
+  // Watch salary values for real-time validation
+  const minSalary = watch('salary.min');
+  const maxSalary = watch('salary.max');
 
   useEffect(() => {
     if (initialData) {
@@ -97,14 +108,14 @@ export default function CreateJobModal({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Job Title"
-          {...register('title', { required: 'Title is required' })}
+          {...register('title')}
           error={errors.title?.message}
         />
 
         <div className="grid grid-cols-2 gap-4">
           <Select
             label="Department"
-            {...register('department', { required: 'Department is required' })}
+            {...register('department')}
             options={[
               { value: 'engineering', label: 'Engineering' },
               { value: 'marketing', label: 'Marketing' },
@@ -115,7 +126,7 @@ export default function CreateJobModal({
 
           <Select
             label="Job Type"
-            {...register('type', { required: 'Job type is required' })}
+            {...register('type')}
             options={[
               { value: 'full-time', label: 'Full Time' },
               { value: 'part-time', label: 'Part Time' },
@@ -128,13 +139,13 @@ export default function CreateJobModal({
 
         <Input
           label="Location"
-          {...register('location', { required: 'Location is required' })}
+          {...register('location')}
           error={errors.location?.message}
         />
 
         <Input
           label="Experience Required"
-          {...register('experience', { required: 'Experience is required' })}
+          {...register('experience')}
           error={errors.experience?.message}
         />
 
@@ -144,9 +155,9 @@ export default function CreateJobModal({
             label="Min Salary"
             {...register('salary.min', { 
               valueAsNumber: true,
-              required: 'Minimum salary is required'
             })}
             error={errors.salary?.min?.message}
+            min={0}
           />
 
           <Input
@@ -154,15 +165,16 @@ export default function CreateJobModal({
             label="Max Salary"
             {...register('salary.max', { 
               valueAsNumber: true,
-              required: 'Maximum salary is required'
             })}
-            error={errors.salary?.max?.message}
+            error={errors.salary?.max?.message || 
+              (minSalary > maxSalary ? "Maximum salary must be greater than minimum salary" : undefined)}
+            min={minSalary || 0}
           />
         </div>
 
         <Input
           label="Description"
-          {...register('description', { required: 'Description is required' })}
+          {...register('description')}
           error={errors.description?.message}
           multiline
           rows={4}
@@ -171,8 +183,20 @@ export default function CreateJobModal({
         <Input
           type="date"
           label="Deadline"
-          {...register('deadline', { required: 'Deadline is required' })}
+          {...register('deadline')}
           error={errors.deadline?.message}
+          min={new Date().toISOString().split('T')[0]}
+        />
+
+        <Select
+          label="Publication Status"
+          {...register('status')}
+          options={[
+            { value: 'draft', label: 'Draft (Private)' },
+            { value: 'active', label: 'Active (Published)' }
+          ]}
+          error={errors.status?.message}
+          helperText="Draft jobs are private and can be published later. Active jobs are immediately visible to candidates."
         />
 
         <div className="flex justify-end gap-3">
