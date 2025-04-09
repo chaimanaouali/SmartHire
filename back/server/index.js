@@ -7,6 +7,7 @@ import hrRoutes from './routes/hr.routes.js';
 import candidateRoutes from './routes/candidate.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
+import jobRoutes from './routes/jobs.routes.js';
 import passport from 'passport';
 import session from 'express-session'
 import path from 'path';
@@ -132,6 +133,8 @@ app.use('/api/department-heads', departmentHeadRoutes);
 app.use('/api/hr', hrRoutes);
 app.use('/api/candidates', candidateRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/jobs', jobRoutes);
+
 
 // Simple test route
 app.get('/test', (req, res) => {

@@ -8,6 +8,8 @@ import Button from '@/components/ui/button/Button';
 import Input from '@/components/form/input/InputField';
 import Select from '@/components/form/Select';
 import { jobsApi } from '@/utils/api';
+import axios from 'axios';  // Add this line
+
 
 export default function JobManagement() {
   const [jobs, setJobs] = useState<JobListing[]>([]);
@@ -42,7 +44,7 @@ export default function JobManagement() {
     }
   };
 
-  const handleCreateJob = async (jobData: JobFormData) => {
+  /*const handleCreateJob = async (jobData: JobFormData) => {
     try {
       const newJob = await jobsApi.createJob(jobData);
       setJobs([...jobs, newJob]);
@@ -50,18 +52,38 @@ export default function JobManagement() {
     } catch (error) {
       console.error('Error creating job:', error);
     }
+  };*/
+  // Update the type in your component to use JobListing
+  const handleCreateJob = async (data: JobListing) => {
+    console.log("Sending data:", data); // Log the data to see its structure
+    try {
+      const res = await axios.post('/api/jobs', data);
+      console.log('Job created:', res.data);
+      setJobs([...jobs, res.data]);
+    } catch (err) {
+      console.error('Error creating job:', err);
+    }
   };
+  
+
+  
+  
+    /*const result = await res.json();
+    console.log('Job created:', result);
+    // Optionally refresh your job list here
+  };*/
+  
 
   const handleEditJob = (job: JobListing) => {
     setSelectedJob(job);
     setIsCreateModalOpen(true);
   };
 
-  const handleUpdateJob = async (data: JobFormData) => {
+  const handleUpdateJob = async (job: JobListing) => {
     if (!selectedJob?.id) return;
     try {
       const updatedJob = await jobsApi.updateJob(selectedJob.id, {
-        ...data,
+        ...job,
         postedDate: selectedJob.postedDate
       });
       setJobs(jobs.map(job => job.id === selectedJob.id ? updatedJob : job));
