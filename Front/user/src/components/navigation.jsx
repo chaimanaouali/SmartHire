@@ -28,20 +28,26 @@ export const Navigation = (props) => {
     setShowDropdown(false);
   };
 
-  const handleNavClick = (path) => {
-    if (location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => {
+  const handleNavigation = (path) => {
+    if (path.startsWith('#')) {
+      // For anchor links on home page
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const element = document.querySelector(path);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
         const element = document.querySelector(path);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100);
-    } else {
-      const element = document.querySelector(path);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else {
+      // For route navigation
+      navigate(path);
     }
   };
 
@@ -64,7 +70,7 @@ export const Navigation = (props) => {
           <Link 
             className="navbar-brand" 
             to="/"
-            onClick={() => handleNavClick('#page-top')}
+            onClick={() => handleNavigation('#page-top')}
           >
             <img 
               src="/img/esprit.jpg" 
@@ -82,7 +88,7 @@ export const Navigation = (props) => {
           <ul className="nav navbar-nav navbar-right">
             <li>
               <button 
-                onClick={() => handleNavClick('#features')} 
+                onClick={() => handleNavigation('#features')} 
                 className="nav-link"
               >
                 HOME
@@ -90,7 +96,7 @@ export const Navigation = (props) => {
             </li>
             <li>
               <button 
-                onClick={() => handleNavClick('#about')} 
+                onClick={() => handleNavigation('#about')} 
                 className="nav-link"
               >
                 ABOUT
@@ -98,7 +104,7 @@ export const Navigation = (props) => {
             </li>
             <li>
               <button 
-                onClick={() => handleNavClick('#services')} 
+                onClick={() => handleNavigation('#portfolio')} 
                 className="nav-link"
               >
                 JOB APPLICATION
@@ -106,15 +112,7 @@ export const Navigation = (props) => {
             </li>
             <li>
               <button 
-                onClick={() => handleNavClick('#portfolio')} 
-                className="nav-link"
-              >
-                RESULTS
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => handleNavClick('#testimonials')} 
+                onClick={() => handleNavigation('#testimonials')} 
                 className="nav-link"
               >
                 INFORMATIONS
@@ -122,7 +120,7 @@ export const Navigation = (props) => {
             </li>
             <li>
               <button 
-                onClick={() => handleNavClick('#team')} 
+                onClick={() => handleNavigation('#team')} 
                 className="nav-link"
               >
                 Team
@@ -130,7 +128,7 @@ export const Navigation = (props) => {
             </li>
             <li>
               <button 
-                onClick={() => handleNavClick('#contact')} 
+                onClick={() => handleNavigation('#contact')} 
                 className="nav-link"
               >
                 CONTACT

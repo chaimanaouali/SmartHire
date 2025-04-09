@@ -14,7 +14,8 @@ const jobListingSchema = new mongoose.Schema({
   },
   status: { type: String, enum: ['active', 'draft'], required: true },
   deadline: { type: Date, required: true },
-  postedDate: { type: Date, default: Date.now }
+  postedDate: { type: Date, default: Date.now },
+  image: { type: String, default: null }
 });
 
 export default mongoose.model('JobListing', jobListingSchema); 

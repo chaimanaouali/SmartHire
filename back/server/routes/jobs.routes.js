@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const { search, department, type, status } = req.query;
-    let query = {};
+    let query = { status: 'active' }; // Default to only active jobs
 
     if (search) {
       query.$or = [
@@ -24,6 +24,7 @@ router.get('/', async (req, res) => {
       query.type = type;
     }
 
+    // Only allow status filter if explicitly provided
     if (status) {
       query.status = status;
     }

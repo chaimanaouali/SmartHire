@@ -15,6 +15,7 @@ import ProfilePage from './components/Profile/ProfilePage';
 import AuthPage from './components/Auth/AuthPage';
 import EditProfile from './components/Profile/EditProfile';
 import UpdatePassword from './components/Profile/UpdatePassword';
+import Results from './pages/Results';
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -73,6 +74,9 @@ const App = () => {
               </PrivateRoute>
             } 
           />
+
+          {/* Results route */}
+          <Route path="/results" element={<Results />} />
 
           {/* Home route */}
           <Route path="/" element={
