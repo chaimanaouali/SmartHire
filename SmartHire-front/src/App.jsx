@@ -18,12 +18,12 @@ import UpdatePassword from './components/Profile/UpdatePassword';
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
+import {Dashboard} from "./components/dashboard/dashboard";
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
   speedAsDuration: true,
 });
-
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -35,6 +35,15 @@ const PrivateRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/auth" />;
 };
 
+const DefaultLayout = ({ children }) => {
+  return (
+    <>
+      <Navigation />
+      {children}
+    </>
+  );
+};
+
 const App = () => {
   const [landingPageData, setLandingPageData] = useState({});
   useEffect(() => {
@@ -44,16 +53,28 @@ const App = () => {
   return (
     <Router>
       <AuthProvider>
-        <Navigation />
         <Routes>
+          {/* Public routes */}
           <Route path="/auth" element={<AuthPage />} />
           
-          {/* Protected routes */}
+          {/* Dashboard route (without navigation) */}
+          <Route 
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+
+          {/* All other protected routes with navigation */}
           <Route 
             path="/profile" 
             element={
               <PrivateRoute>
-                <ProfilePage />
+                <DefaultLayout>
+                  <ProfilePage />
+                </DefaultLayout>
               </PrivateRoute>
             } 
           />
@@ -61,32 +82,39 @@ const App = () => {
             path="/edit-profile" 
             element={
               <PrivateRoute>
-                <EditProfile />
+                <DefaultLayout>
+                  <EditProfile />
+                </DefaultLayout>
               </PrivateRoute>
             } 
           />
-          <Route 
+          <Route
             path="/update-password" 
             element={
               <PrivateRoute>
-                <UpdatePassword />
+                <DefaultLayout>
+                  <UpdatePassword />
+                </DefaultLayout>
               </PrivateRoute>
             } 
           />
 
-          {/* Home route */}
-          <Route path="/" element={
-            <>
-              <Header data={landingPageData.Header} />
-              <Features data={landingPageData.Features} />
-              <About data={landingPageData.About} />
-              <Services data={landingPageData.Services} />
-              <Gallery data={landingPageData.Gallery} />
-              <Testimonials data={landingPageData.Testimonials} />
-              <Team data={landingPageData.Team} />
-              <Contact data={landingPageData.Contact} />
-            </>
-          } />
+          {/* Home route with navigation */}
+          <Route 
+            path="/" 
+            element={
+              <DefaultLayout>
+                <Header data={landingPageData.Header} />
+                <Features data={landingPageData.Features} />
+                <About data={landingPageData.About} />
+                <Services data={landingPageData.Services} />
+                <Gallery data={landingPageData.Gallery} />
+                <Testimonials data={landingPageData.Testimonials} />
+                <Team data={landingPageData.Team} />
+                <Contact data={landingPageData.Contact} />
+              </DefaultLayout>
+            } 
+          />
 
           {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" replace />} />
