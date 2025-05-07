@@ -32,22 +32,24 @@ at Esprit School of Engineering as part of the 4TWIN full-stack training program
 
 ## 🛠️ Installation & Setup
 
-### 1. 🔁 Clone the repository  
-```bash
+# 🔁 1️⃣ Clone the Repository
 git clone https://github.com/chaimanaouali/smartHire.git
 cd smartHire
-### 2. 📦 Install dependencies 
-  npm install
-### 3. ⚙️ Setup Backend
-  cd back
-  npm install
-  npm run dev
- ==> Server runs at: http://localhost:5001
-### 4. 🎨 Setup Frontend
-  cd ../Front
-  npm install
-  npm start
- ==> App runs at: http://localhost:3000
+
+# 📦 2️⃣ Install Root Dependencies
+npm install
+
+# ⚙️ 3️⃣ Setup the Backend
+cd back
+npm install
+npm run dev
+➡️ Server runs at: http://localhost:5001
+
+# 🎨 4️⃣ Setup the Frontend (in a new terminal)
+cd ../Front
+npm install
+npm start
+➡️ App runs at: http://localhost:3000
 
 
 🤝 Contributions
