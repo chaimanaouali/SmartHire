@@ -40,15 +40,15 @@ cd smartHire
 npm install
 
 # ⚙️ 3️⃣ Setup the Backend
-cd back
-npm install
-npm run dev
+- cd back
+- npm install
+- npm run dev
 ➡️ Server runs at: http://localhost:5001
 
 # 🎨 4️⃣ Setup the Frontend (in a new terminal)
-cd ../Front
-npm install
-npm start
+- cd ../Front
+- npm install
+- npm start
 ➡️ App runs at: http://localhost:3000
 
 
